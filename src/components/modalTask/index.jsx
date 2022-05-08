@@ -1,20 +1,35 @@
 import * as C from "./styles";
 import { Modal, Text } from "react-native";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ButtonFloat from "../buttonFloat";
 import { AntDesign, Entypo } from "@expo/vector-icons";
+import uuid from "react-native-uuid";
 
 export default () => {
-  const { handleCloseModal, modalIsVisible } = useContext(AppContext);
-  const [task, setTask] = useState("");
+  const { handleCloseModal, modalIsVisible, taskList, setTaskList } =
+    useContext(AppContext);
+
+  const [taskName, setTaskName] = useState("");
+
+  function handleAddNewTask() {
+    let newList = [...taskList];
+    newList.push({
+      id: uuid.v4(),
+      taskName,
+      done: false,
+    });
+    setTaskList(newList);
+    setTaskName("");
+    handleCloseModal();
+  }
 
   const Button = () => {
-    return task === "" ? (
+    return taskName === "" ? (
       <ButtonFloat onPress={handleCloseModal}>
         <AntDesign name="close" size={35} color="white" />
       </ButtonFloat>
     ) : (
-      <ButtonFloat onPress={handleCloseModal}>
+      <ButtonFloat onPress={handleAddNewTask}>
         <Entypo name="add-to-list" size={35} color="white" />
       </ButtonFloat>
     );
@@ -29,7 +44,11 @@ export default () => {
     >
       <C.ModalContainer>
         <C.ModalContent>
-          <C.Input placeholder="Digite sua tarefa..." value={task} onChangeText={(t) => setTask(t)} />
+          <C.Input
+            placeholder="Digite sua tarefa..."
+            value={taskName}
+            onChangeText={(t) => setTaskName(t)}
+          />
         </C.ModalContent>
         <Button />
       </C.ModalContainer>

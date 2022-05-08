@@ -1,21 +1,30 @@
 import { createContext, useState } from "react";
 
-export default AppContext = createContext()
+export default AppContext = createContext();
 
-export function AppProvider({children}){
-    const [modalIsVisible, setModalIsVisible] = useState(false);
+export function AppProvider({ children }) {
+  const [modalIsVisible, setModalIsVisible] = useState(false);
+  const [taskList, setTaskList] = useState([]);
 
-    function handleOpenModal(){
-        setModalIsVisible(true)
-    }
+  function handleOpenModal() {
+    setModalIsVisible(true);
+  }
 
-    function handleCloseModal(){
-        setModalIsVisible(false)
-    }
+  function handleCloseModal() {
+    setModalIsVisible(false);
+  }
 
-    return(
-        <AppContext.Provider value={{modalIsVisible, handleCloseModal, handleOpenModal}}>
-            {children}
-        </AppContext.Provider>
-    )
+  return (
+    <AppContext.Provider
+      value={{
+        modalIsVisible,
+        handleCloseModal,
+        handleOpenModal,
+        taskList,
+        setTaskList,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
 }
